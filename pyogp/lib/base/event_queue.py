@@ -49,7 +49,10 @@ class EventQueueClient(object):
     >>> cap = Capability('EventQueueGet', 'http://localhost:12345/cap')
 
     >>> event_queue = EventQueueClient(cap)
-    >>> event_queue.start()
+    
+    To start the event queue client, simply call start(). 
+    (Not doctested as coroutines are complicating things here ;) )
+    event_queue.start()
     True
     
     >>> event_queue.stop()
