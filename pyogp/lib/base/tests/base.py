@@ -260,6 +260,61 @@ class MockAgentDomain(object):
         self.response.body = body
         return self.response(self.environ, self.start)
 
+class MockCapHandler(object):
+    """ models handling a request against a capability """
+
+    def __call__(self, environ, start_response):
+
+        self.environ = environ
+        self.start = start_response
+        self.request = Request(environ)
+        self.response = Response()
+
+        self.headers = self.request.headers
+        data = self.request.body
+
+        # ToDo: we should really parse the data we receive in the string and respond nicely
+        if self.request.path=="/good_cap":
+            if self.request.method=="GET":
+                return self.handle_GET()
+            elif self.request.method=="POST":
+                return self.handle_POST()
+        elif self.request.path=="/get_503":
+            return self.send_response(503, 'Server not available.')
+        elif self.request.path=="/get_no_llsd":
+            return self.handle_nollsd()          
+        else:
+            return self.send_response(404, 'resource not found.')
+
+    def handle_GET(self):
+
+        d = {'foo':'bar'}
+        self.response.status = 200
+        self.response.content_type='application/llsd+xml'
+        self.response.body = llsd.format_xml(d)
+        return self.response(self.environ, self.start)
+
+    def handle_POST(self):
+
+        d = {'foo':'bar'}
+        self.response.status = 200
+        self.response.content_type='application/llsd+xml'
+        self.response.body = llsd.format_xml(d)
+        return self.response(self.environ, self.start)
+
+    def handle_nollsd(self):
+
+        d = "{'foo':'bar'}"
+        self.response.status = 200
+        self.response.content_type='application/text'
+        self.response.body = d
+        return self.response(self.environ, self.start)
+
+    def send_response(self, status, body=''):
+        self.response.status = status
+        self.response.body = body
+        return self.response(self.environ, self.start)
+
 def main():
     from wsgiref.simple_server import make_server
     print 'I am here'
