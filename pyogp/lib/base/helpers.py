@@ -24,7 +24,7 @@ import math
 
 # related
 from llbase import llsd
-from eventlet import api
+import eventlet
 
 # pyogp
 from pyogp.lib.base.exc import DataParsingError, DeserializationFailed
@@ -300,7 +300,7 @@ class Wait(object):
         while self.enabled and now - start < self.duration:
 
             try:
-                api.sleep()
+                eventlet.sleep()
                 now = time.time()
             except AssertionError:
                 pass

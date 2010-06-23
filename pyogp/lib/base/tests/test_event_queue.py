@@ -21,7 +21,7 @@ import unittest
 
 # related
 from llbase import llsd
-from eventlet import api, coros
+import eventlet
 
 # pyogp
 from pyogp.lib.base.event_queue import EventQueueClient
@@ -99,13 +99,13 @@ class TestEventQueue(unittest.TestCase):
 
         self.eq.cap = Capability('EventQueueGet', 'http://127.0.0.1')
         self.assertFalse(self.eq.stopped)
-        api.spawn(self.eq.start)
-        api.sleep(1)
+        eventlet.spawn(self.eq.start)
+        eventlet.sleep(1)
         #self.eq.stop() #stop is broken atm
         self.eq.stopped = True
-        api.sleep(.1)
+        eventlet.sleep(.1)
         self.assertTrue(self.eq.stopped)
-        api.sleep(1)
+        eventlet.sleep(1)
         self.assertFalse(self.eq._running)
 
 def test_suite():

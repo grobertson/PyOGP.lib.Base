@@ -31,7 +31,7 @@ from pyogp.lib.base.message.udpdispatcher import UDPDispatcher
 # pyogp tests
 import pyogp.lib.base.tests.config 
 
-from eventlet import api
+import eventlet
 
 class TestMessageManager(unittest.TestCase):
 
@@ -46,11 +46,11 @@ class TestMessageManager(unittest.TestCase):
 
     def test_start_stop_monitors(self):
         self.message_manager.start_monitors()
-        api.sleep(0)
+        eventlet.sleep(0)
         self.assertTrue(self.message_manager._is_running)
         self.assertTrue(self.message_manager.event_queue._running)
         self.message_manager.stop_monitors()
-        api.sleep(2)
+        eventlet.sleep(2)
         self.assertFalse(self.message_manager._is_running)
         self.assertTrue(self.message_manager.event_queue.stopped)
         self.assertFalse(self.message_manager.event_queue._running)

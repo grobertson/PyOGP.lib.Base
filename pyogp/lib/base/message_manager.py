@@ -27,7 +27,7 @@ from pyogp.lib.base.event_queue import EventQueueClient
 from pyogp.lib.base.settings import Settings
 
 # related
-from eventlet import api
+import eventlet
 
 # initialize logging
 logger = getLogger('pyogp.lib.base.message_manager')
@@ -122,14 +122,14 @@ class MessageManager(object):
 
         logger.debug('Spawning region UDP connection')
 
-        api.spawn(self._udp_dispatcher)
+        eventlet.spawn(self._udp_dispatcher)
 
         if self.event_queue != None and self.settings.ENABLE_REGION_EVENT_QUEUE:
             logger.debug('Spawning region event queue connection')
-            api.spawn(self.event_queue.start)
+            eventlet.spawn(self.event_queue.start)
 
-        #api.spawn(self.monitor_outgoing_queue)
-        #api.spawn(self.monitor_incoming_queue)
+        #eventlet.spawn(self.monitor_outgoing_queue)
+        #eventlet.spawn(self.monitor_incoming_queue)
 
     def stop_monitors(self):
         """ stops monitoring coroutines """
@@ -170,7 +170,7 @@ class MessageManager(object):
         """
         logger.debug('Spawning region UDP connection')
         while self._is_running:
-            api.sleep(0)
+            eventlet.sleep(0)
             msg_buf, msg_size = self.udp_dispatcher.udp_client.receive_packet(self.udp_dispatcher.socket)
             recv_packet = self.udp_dispatcher.receive_check(self.udp_dispatcher.udp_client.get_sender(),
                                                             msg_buf, 

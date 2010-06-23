@@ -21,10 +21,10 @@ from logging import getLogger
 import traceback
 
 # related
-from eventlet import api, util
+import eventlet
 
 # the following makes socket calls nonblocking. magic
-util.wrap_socket_with_coroutine_socket()
+eventlet.patcher.monkey_patch(all=False, socket=True)
 
 # pyogp
 
@@ -148,7 +148,7 @@ class EventQueueClient(object):
             """ monitors the stopping of the event queue client connection """
 
             for i in range(0, times):
-                api.sleep(interval)
+                eventlet.sleep(interval)
                 if self._running == False:
                     logger.info(
                         "Stopped event queue processing for %s",
@@ -159,7 +159,7 @@ class EventQueueClient(object):
                 self.host,
                 str(interval * times))
 
-        api.spawn(stop_monitor, self, self.settings.REGION_EVENT_QUEUE_POLL_INTERVAL, 10)
+        eventlet.spawn(stop_monitor, self, self.settings.REGION_EVENT_QUEUE_POLL_INTERVAL, 10)
 
     def _processRegionEventQueue(self):
 
@@ -173,7 +173,7 @@ class EventQueueClient(object):
             while not self.stopped:
 
                 try:
-                    api.sleep(self.settings.REGION_EVENT_QUEUE_POLL_INTERVAL)
+                    eventlet.sleep(self.settings.REGION_EVENT_QUEUE_POLL_INTERVAL)
 
                     self.data = {}
                     if self.last_id != -1:
@@ -225,7 +225,7 @@ class EventQueueClient(object):
             self._running = True
             while not self.stopped:
 
-                api.sleep(self.settings.agentdomain_event_queue_interval)
+                eventlet.sleep(self.settings.agentdomain_event_queue_interval)
 
                 self.result = self.capabilities['event_queue'].POST(self.data)
 
