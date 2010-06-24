@@ -31,7 +31,10 @@ from pyogp.lib.base.message.udpdispatcher import UDPDispatcher
 # pyogp tests
 import pyogp.lib.base.tests.config 
 
-import eventlet
+try:
+    from eventlet import api as eventlet
+except ImportError:
+    import eventlet
 
 class TestMessageManager(unittest.TestCase):
 

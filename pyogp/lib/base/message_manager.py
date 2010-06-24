@@ -27,7 +27,10 @@ from pyogp.lib.base.event_queue import EventQueueClient
 from pyogp.lib.base.settings import Settings
 
 # related
-import eventlet
+try:
+    from eventlet import api as eventlet
+except ImportError:
+    import eventlet
 
 # initialize logging
 logger = getLogger('pyogp.lib.base.message_manager')

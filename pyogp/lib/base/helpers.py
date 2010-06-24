@@ -24,7 +24,10 @@ import math
 
 # related
 from llbase import llsd
-import eventlet
+try:
+    from eventlet import api as eventlet
+except ImportError:
+    import eventlet
 
 # pyogp
 from pyogp.lib.base.exc import DataParsingError, DeserializationFailed
