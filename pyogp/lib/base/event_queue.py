@@ -24,7 +24,10 @@ import traceback
 import eventlet
 
 # the following makes socket calls nonblocking. magic
-eventlet.patcher.monkey_patch(all=False, socket=True)
+try:
+    eventlet.patcher.monkey_patch(all=True, socket=True)
+except AttributeError: 
+    eventlet.util.wrap_socket_with_coroutine_socket()
 
 # pyogp
 
