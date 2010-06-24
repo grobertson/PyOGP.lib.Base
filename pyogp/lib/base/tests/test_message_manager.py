@@ -33,7 +33,7 @@ import pyogp.lib.base.tests.config
 
 try:
     from eventlet import api as eventlet
-except ImportError, DeprecationWarning:
+except ImportError:
     import eventlet
 
 class TestMessageManager(unittest.TestCase):
