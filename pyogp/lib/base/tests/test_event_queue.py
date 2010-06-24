@@ -23,7 +23,7 @@ import unittest
 from llbase import llsd
 try:
     from eventlet import api as eventlet
-except ImportError:
+except ImportError, DeprecationWarning:
     import eventlet
 
 # pyogp

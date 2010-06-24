@@ -29,7 +29,7 @@ from pyogp.lib.base.settings import Settings
 # related
 try:
     from eventlet import api as eventlet
-except ImportError:
+except ImportError, DeprecationWarning:
     import eventlet
 
 # initialize logging
