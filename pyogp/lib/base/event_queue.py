@@ -21,16 +21,21 @@ from logging import getLogger
 import traceback
 
 # related
-import eventlet
-
-# the following makes socket calls nonblocking. magic
 try:
+    # handle modern eventlet as of 0.9.9
+    import eventlet
+
+    # the following makes socket calls nonblocking. magic
     eventlet.patcher.monkey_patch(all=True, socket=True)
-except AttributeError: 
-    eventlet.util.wrap_socket_with_coroutine_socket()
+except AttributeError:
+    # handle eventlet as of 0.8.16
+    from eventlet import util
+    from eventlet import api as eventlet
 
+    # the following makes socket calls nonblocking. magic
+    util.wrap_socket_with_coroutine_socket()
+    
 # pyogp
-
 from pyogp.lib.base.exc import RegionCapNotAvailable
 
 # messaging
