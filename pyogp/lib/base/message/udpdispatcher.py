@@ -55,14 +55,12 @@ class UDPDispatcher(object):
         #the ID of the packet we most recently received
         self.receive_packet_id = -1
 
-        self.socket = None
-
         if udp_client == None:
             self.udp_client = NetUDPClient()
         else:
             self.udp_client = udp_client
 
-        self.socket = self.udp_client.start_udp_connection()
+        self.udp_client.start_udp_connection()
 
         # allow the settings to be passed in
         # otherwise, grab the defaults
@@ -229,7 +227,7 @@ class UDPDispatcher(object):
                     logger.debug('Sent packet    %s : %s (%s)%s' % (host_string, packet.name, packet.packet_id, hex_string))
 
             #TODO: remove this when testing a network
-            self.udp_client.send_packet(self.socket, send_buffer, host)
+            self.udp_client.send_packet(send_buffer, host)
 
             self.packets_out += 1
 

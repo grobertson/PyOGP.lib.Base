@@ -42,7 +42,7 @@ class MessageManager(object):
     """
 
     def __init__(self, host, message_handler=None, capabilities={},
-                 settings=None, start_monitors=False, message_template = None, message_xml = None):
+                 settings=None, start_monitors=False, message_template = None):
         """ 
         Initialize the MessageManager, applying custom settings and dedicated 
         message_handler if needed 
@@ -78,18 +78,6 @@ class MessageManager(object):
 
                 from pyogp.lib.base.data import msg_tmpl
                 self.message_template = msg_tmpl
-
-        # allow the passing in of message.xml as a file handle
-        # mapped to MessageDotXML()
-        if not message_xml:
-            self.message_xml = MessageDotXML()
-        else:
-            if isinstance(message_xml, file):
-                self.message_xml = MessageDotXML(message_xml = message_xml.read())
-            else:
-                log.warning("%s parameter is expected to be a filehandle, it is a %s. \
-                        Using the embedded message.xml" % (message_xml, type(message_xml)))
-                self.message_xml = MessageDotXML()
 
         # initialize the manager's base attributes
         #self.builder = MessageBuilder()
@@ -174,7 +162,7 @@ class MessageManager(object):
         logger.debug('Spawning region UDP connection')
         while self._is_running:
             eventlet.sleep(0)
-            msg_buf, msg_size = self.udp_dispatcher.udp_client.receive_packet(self.udp_dispatcher.socket)
+            msg_buf, msg_size = self.udp_dispatcher.udp_client.receive_packet()
             recv_packet = self.udp_dispatcher.receive_check(self.udp_dispatcher.udp_client.get_sender(),
                                                             msg_buf, 
                                                             msg_size)

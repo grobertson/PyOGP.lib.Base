@@ -28,34 +28,40 @@ logger = getLogger('net.net')
 class NetUDPClient(object):
 
     def __init__(self):
+
         self.sender = Host((None, None))
+        self.socket = None
 
     def get_sender(self):
+
         return self.sender
 
-    def send_packet(self, sock, send_buffer, host):
+    def send_packet(self, send_buffer, host):
+
         #print "Sending to " + str(host.ip) + ":" + str(host.port) + ":" + send_buffer
         #logger.debug("In send_packet")
         if send_buffer == None:
             raise Exception("No data specified")
 
-        bytes = sock.sendto(send_buffer, (host.ip, host.port))
+        bytes = self.socket.sendto(send_buffer, (host.ip, host.port))
 
-    def receive_packet(self, sock):
+    def receive_packet(self):
+
         buf = 10000
         try:
-            data, addr = sock.recvfrom(buf)
-            #print "Received data: " + repr(data)
+            data, addr = self.socket.recvfrom(buf)
         except:
             return '', 0
-        #print self.sender
+
         self.sender.ip = addr[0]
         self.sender.port = addr[1]
+
         return data, len(data)
 
     def start_udp_connection(self):
         """ Starts a udp connection, returning socket and port. """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         # 24-Mar-2009 settimeout is not needed since we wrap the socket for coroutines.
         # However, we may need to check eventlet/greenlet versions in the future and call this if needed.
@@ -63,7 +69,7 @@ class NetUDPClient(object):
         #error check - make sure sock is good
 
         #will probably be other setup for this
-        return sock
+        return self.socket
 
     def __repr__(self):
 

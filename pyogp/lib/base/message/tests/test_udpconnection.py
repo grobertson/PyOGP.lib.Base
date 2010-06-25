@@ -118,7 +118,7 @@ class TestUDPConnection(unittest.TestCase):
         server = MockupUDPServer()
         server.send_message(self.udp_connection.udp_client, out_message)
 
-        data, data_size = self.udp_connection.udp_client.receive_packet(0)
+        data, data_size = self.udp_connection.udp_client.receive_packet()
         packet = self.udp_connection.receive_check(self.udp_connection.udp_client.sender,
                                           data, data_size)
         assert packet.name == 'PacketAck'
@@ -131,7 +131,7 @@ class TestUDPConnection(unittest.TestCase):
         server = MockupUDPServer()
         server.send_message(self.udp_connection.udp_client, out_message)
 
-        data, data_size = self.udp_connection.udp_client.receive_packet(0)
+        data, data_size = self.udp_connection.udp_client.receive_packet()
         packet = self.udp_connection.receive_check(self.udp_connection.udp_client.sender,
                                           data, data_size)
         assert packet.name == 'PacketAck'
@@ -144,7 +144,7 @@ class TestUDPConnection(unittest.TestCase):
         server = MockupUDPServer()
         server.send_message(self.udp_connection.udp_client, out_message)
 
-        data, data_size = self.udp_connection.udp_client.receive_packet(0)
+        data, data_size = self.udp_connection.udp_client.receive_packet()
         packet = self.udp_connection.receive_check(self.udp_connection.udp_client.sender,
                                           data, data_size)
         sender_host = self.udp_connection.udp_client.get_sender()
@@ -158,7 +158,7 @@ class TestUDPConnection(unittest.TestCase):
         server = MockupUDPServer()
         server.send_message(self.udp_connection.udp_client, out_message)
 
-        data, data_size = self.udp_connection.udp_client.receive_packet(0)
+        data, data_size = self.udp_connection.udp_client.receive_packet()
         packet = self.udp_connection.receive_check(self.udp_connection.udp_client.sender,
                                           data, data_size)
         assert server.rec_buffer == '', "ERROR: server has message without " + \

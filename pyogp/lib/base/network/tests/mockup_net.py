@@ -41,20 +41,21 @@ class MockupUDPClient(object):
     def __init__(self):
         self.rec = ''
         self.sender = None
+        self.socket = None
 
     def get_sender(self):
         return self.sender
 
-    def set_response(self, socket, response):
-        self.rec[socket] = response
+    def set_response(self, response):
+        self.rec[self.socket] = response
 
-    def send_packet(self, sock, send_buffer, host):
+    def send_packet(self,send_buffer, host):
         #host is a mockup server
         #print 'CLIENT send'
         host.ip.receive_message(self, send_buffer)
         return True
 
-    def receive_packet(self, socket):
+    def receive_packet(self):
         #print 'CLIENT receive'
         data = self.rec
         self.rec = ''
@@ -66,8 +67,8 @@ class MockupUDPClient(object):
 
     def start_udp_connection(self):
         """ Starts a udp connection, returning socket and port. """
-        sock = random.randint(0,80)
-        return sock
+        self.socket = random.randint(0,80)
+        return self.socket
 
 
 
